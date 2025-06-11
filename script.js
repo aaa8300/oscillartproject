@@ -1,6 +1,8 @@
 var amplitude = 40;
 const input = document.getElementById('input');
-
+var timepernote = 0;
+var length = 0;
+var reset = false;
 var interval = null;
 
 // create web audio api elements
@@ -28,15 +30,33 @@ function frequency(pitch) {
     freq = pitch / 10000;
     gainNode.gain.setValueAtTime(100, audioCtx.currentTime);
     oscillator.frequency.setValueAtTime(pitch, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime + 1);
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime + (timepernote / 1000) - 0.1);
 }
 
 
 function handle() {
+    reset = true;
     audioCtx.resume();
     gainNode.gain.value = 0;
     var usernotes = String(input.value);
-    frequency(notenames.get(usernotes)); 
+    length = usernotes.length;
+    timepernote = (6000 / length);
+    var noteslist = [];
+    for (i = 0; i < usernotes.length; i++) {
+        noteslist.push(notenames.get(usernotes.charAt(i)));
+    } 
+    let j = 0;
+   repeat = setInterval(() => {
+       if (j < noteslist.length) {
+           frequency(parseInt(noteslist[j]));
+           drawWave();
+       j++
+       } else {
+           clearInterval(repeat)
+       }
+
+
+   }, timepernote);
     drawWave();
 }
 
@@ -51,6 +71,7 @@ var height = ctx.canvas.height;
 var counter = 0;
 
 function drawWave() {
+    clearInterval(interval);
     // clears everything inside canvas 
     ctx.clearRect(0, 0, width, height);
 
@@ -62,11 +83,21 @@ function drawWave() {
 
     ctx.beginPath();
     counter = 0;
+    line();
     interval = setInterval(line, 20);
+    
+    if (reset) {
+       ctx.clearRect(0, 0, width, height);
+       x = 0;
+       y = height/2;
+       ctx.moveTo(x, y);
+       ctx.beginPath();
+   }
+    reset = false;
 }
 
 function line() {
-    y = height/2 + (amplitude * Math.sin(2 * Math.PI * freq * x));
+    y = height/2 + amplitude * Math.sin(x * 2  * Math.PI * freq * (0.5 * length));
     ctx.lineTo(x, y);
     ctx.stroke();
     x = x + 1;
@@ -74,7 +105,7 @@ function line() {
     //increase counter by 1 to show how long interval has been run
     counter++;
 
-    if(counter > 50) {
+    if(counter > timepernote / 20) {
         clearInterval(interval);
     }
 }
