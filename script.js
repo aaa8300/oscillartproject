@@ -83,7 +83,7 @@ function drawWave() {
 
     ctx.beginPath();
     counter = 0;
-    line();
+
     interval = setInterval(line, 20);
     
     if (reset) {
