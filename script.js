@@ -74,7 +74,6 @@ function drawWave() {
     clearInterval(interval);
 
     counter = 0;
-
     interval = setInterval(line, 20);
     
     if (reset) {
