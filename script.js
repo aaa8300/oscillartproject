@@ -58,7 +58,7 @@ function drawWave() {
     y = height/2;
 
     // move pointer to left-most middle of canvas to start drawing wave there
-    ctx.moveto(x, y);
+    ctx.moveTo(x, y);
 
     ctx.beginPath();
     counter = 0;
