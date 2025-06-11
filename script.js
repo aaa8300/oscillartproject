@@ -57,7 +57,7 @@ function handle() {
 
 
    }, timepernote);
-    drawWave();
+
 }
 
 
