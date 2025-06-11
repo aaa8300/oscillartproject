@@ -72,16 +72,7 @@ var counter = 0;
 
 function drawWave() {
     clearInterval(interval);
-    // clears everything inside canvas 
-    ctx.clearRect(0, 0, width, height);
 
-    x = 0;
-    y = height/2;
-
-    // move pointer to left-most middle of canvas to start drawing wave there
-    ctx.moveTo(x, y);
-
-    ctx.beginPath();
     counter = 0;
 
     interval = setInterval(line, 20);
