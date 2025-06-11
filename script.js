@@ -1,4 +1,5 @@
 var amplitude = 40;
+var freq = 0;
 const input = document.getElementById('input');
 
 var interval = null;
