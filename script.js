@@ -12,6 +12,7 @@ const gainNode = audioCtx.createGain();
 
 const color_picker = document.getElementById('color');
 const vol_slider = document.getElementById('vol-slider');
+const thickness_slider = document.getElementById('thickness');
 
 
 var blob, recorder = null;
@@ -143,17 +144,18 @@ function drawWave() {
     interval = setInterval(line, 20);
     
     if (reset) {
-       ctx.clearRect(0, 0, width, height);
-       x = 0;
-       y = height/2;
-       ctx.moveTo(x, y);
-       ctx.beginPath();
+      ctx.clearRect(0, 0, width, height);
+      x = 0;
+      y = height/2;
+      ctx.moveTo(x, y);
+      ctx.beginPath();
    }
     reset = false;
 }
 
 function line() {
     ctx.strokeStyle = color_picker.value;
+    ctx.lineWidth = thickness_slider.value;
     ctx.stroke();
   
     y = height/2 + ((vol_slider.value/100)*40) * Math.sin(x * 2  * Math.PI * freq * (0.5 * length));
