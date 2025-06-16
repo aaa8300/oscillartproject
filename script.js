@@ -9,8 +9,18 @@ var interval = null;
 const audioCtx = new AudioContext();
 const gainNode = audioCtx.createGain();
 
+
 const color_picker = document.getElementById('color');
 const vol_slider = document.getElementById('vol-slider');
+
+
+var blob, recorder = null;
+var chunks = [];
+
+var is_recording = false;
+
+const recording_toggle = document.getElementById('record');
+
 
 // create Oscillator node
 const oscillator = audioCtx.createOscillator();
@@ -28,6 +38,57 @@ notenames.set("F", 349.2);
 notenames.set("G", 392.0);
 notenames.set("A", 440);
 notenames.set("B", 493.9);
+
+
+function toggle() {
+  is_recording = !is_recording; 
+  if(is_recording){
+    recording_toggle.innerHTML = "Stop Recording";
+    startRecording(); 
+  } 
+  else {
+    recording_toggle.innerHTML = "Start Recording";
+    recorder.stop();
+  }
+}
+
+
+function startRecording(){
+  const canvasStream = canvas.captureStream(20); // Frame rate of canvas
+  const audioDestination = audioCtx.createMediaStreamDestination();
+  gainNode.connect(audioDestination);
+  const combinedStream = new MediaStream();
+  
+  // Add in video data
+  canvasStream.getVideoTracks().forEach(track => combinedStream.addTrack(track));
+  audioDestination.stream.getAudioTracks().forEach(track => combinedStream.addTrack(track));
+  
+  recorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm' });
+  
+  recorder.ondataavailable = e => {
+    if (e.data.size > 0) {
+      chunks.push(e.data);
+    }
+  };
+
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recording.webm';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  
+  
+  
+  
+  recorder.start();
+
+}
+
 
 function frequency(pitch) {
     freq = pitch / 10000;
