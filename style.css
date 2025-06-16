@@ -1,8 +1,18 @@
+body{
+  background: #EEAECA;
+  background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+}
+
+h1{
+  text-align: center;
+}
+
 #canvas {
   border: 5px solid black;
   height: 500px;
   width: 900px;
   margin-bottom: 2em;
+  background: white;
 }
 
 #container {
@@ -32,7 +42,7 @@ button {
 #vol-slider, #thickness {
   width: 200px;
   appearance: none;
-  background: #ddd;
+  background: white;
   border-radius: 50px;
 }
 
@@ -42,6 +52,7 @@ button {
   height: 40px;
   border: none;
   border-radius: 10px;
+  background: white;
 }
 
 
